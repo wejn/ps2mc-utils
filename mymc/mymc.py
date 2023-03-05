@@ -737,16 +737,6 @@ def main():
 	optparser.disable_interspersed_args()
 	(opts, args) = optparser.parse_args()
 
-	if len(args) == 0:
-		try:
-			import gui
-		except ImportError:
-			gui = None
-		if gui != None:
-			optparser.destroy()
-			gui.run()
-			sys.exit(0)
-
 	if len(args) < 2:
 		optparser.error("Incorrect number of arguments.")
 
