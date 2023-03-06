@@ -56,6 +56,117 @@ $ ruby sectorstrip.rb blank.ps2 blank.mcd
 + Done.
 ```
 
+## How to extract & repackage existing card
+
+Please note: signed/encrypted elf files are specific to the one card.
+It won't be possible to shuffle them to a different card. That said,
+looks like sd2psx uses the same ID for all cards. :-)
+
+Also note: extracting and repackaging will break file linking, resulting
+in more space wasted. You might not care, though. Especially if you use this
+for sd2psx.
+
+``` sh
+$ ruby sectorpad.rb Card1-1.mcd Card1-1.ps2
++ Input size OK (RAW 8MB card with 512B sectors)
++ Done.
+
+$ ruby dump-card.rb Card1-1.ps2 dump
++ Extracting contents ...
+  > mkdir BOOT
+    + extract icon.sys
+    + extract BOOT.ELF
+    + extract BOOT.icn
+  > mkdir SYS-CONF
+    + extract ICON.SYS
+    + extract FMCB_CFG.ELF
+    + extract SYSCONF.ICN
+    + extract USBD.IRX
+    + extract USBHDFSD.IRX
+    + extract FREEMCB.CNF
+  > mkdir BIEXEC-SYSTEM
+    + extract ICON.SYS
+    + extract osdsys.elf
+    + extract osd130.elf
+    + extract DEV9.IRX
+    + extract osd110.elf
+    + extract ATAD.IRX
+    + extract osdmain.elf
+    + extract HDDLOAD.IRX
+    + extract FMCB.ICN
+  > mkdir BAEXEC-SYSTEM
+    + extract ICON.SYS
+    + extract osd130.elf
+    + extract osd120.elf
+    + extract osdmain.elf
+    + extract FMCB.ICN
+  > mkdir BCEXEC-SYSTEM
+    + extract ICON.SYS
+    + extract osdmain.elf
+    + extract FMCB.ICN
+  > mkdir APPS
+    + extract FMCBapps.icn
+    + extract icon.sys
+  > mkdir BEEXEC-SYSTEM
+    + extract ICON.SYS
+    + extract osd130.elf
+    + extract osdmain.elf
+    + extract FMCB.ICN
++ All done.
+
+# tweak the 'dump' directory as you like
+
+$ ruby card-from-dir.rb c.ps2 dump
++ Formatting card "c.ps2" ...
++ Adding contents ...
+> mkdir "BOOT"
+> add "BOOT/icon.sys"
+> add "BOOT/BOOT.ELF"
+> add "BOOT/BOOT.icn"
+> mkdir "SYS-CONF"
+> add "SYS-CONF/ICON.SYS"
+> add "SYS-CONF/FMCB_CFG.ELF"
+> add "SYS-CONF/SYSCONF.ICN"
+> add "SYS-CONF/USBD.IRX"
+> add "SYS-CONF/USBHDFSD.IRX"
+> add "SYS-CONF/FREEMCB.CNF"
+> mkdir "BIEXEC-SYSTEM"
+> add "BIEXEC-SYSTEM/ICON.SYS"
+> add "BIEXEC-SYSTEM/osdsys.elf"
+> add "BIEXEC-SYSTEM/osd130.elf"
+> add "BIEXEC-SYSTEM/DEV9.IRX"
+> add "BIEXEC-SYSTEM/osd110.elf"
+> add "BIEXEC-SYSTEM/ATAD.IRX"
+> add "BIEXEC-SYSTEM/osdmain.elf"
+> add "BIEXEC-SYSTEM/HDDLOAD.IRX"
+> add "BIEXEC-SYSTEM/FMCB.ICN"
+> mkdir "BAEXEC-SYSTEM"
+> add "BAEXEC-SYSTEM/ICON.SYS"
+> add "BAEXEC-SYSTEM/osd130.elf"
+> add "BAEXEC-SYSTEM/osd120.elf"
+> add "BAEXEC-SYSTEM/osdmain.elf"
+> add "BAEXEC-SYSTEM/FMCB.ICN"
+> mkdir "BCEXEC-SYSTEM"
+> add "BCEXEC-SYSTEM/ICON.SYS"
+> add "BCEXEC-SYSTEM/osdmain.elf"
+> add "BCEXEC-SYSTEM/FMCB.ICN"
+> mkdir "APPS"
+> add "APPS/FMCBapps.icn"
+> add "APPS/icon.sys"
+> mkdir "BEEXEC-SYSTEM"
+> add "BEEXEC-SYSTEM/ICON.SYS"
+> add "BEEXEC-SYSTEM/osd130.elf"
+> add "BEEXEC-SYSTEM/osdmain.elf"
+> add "BEEXEC-SYSTEM/FMCB.ICN"
++ All done.
+
+$ ruby sectorstrip.rb c.ps2 c.mcd
++ This is padded 8MB card, cool.
++ Done.
+
+# c.mcd is now ready to rock.
+```
+
 ## License
 
 The `sector*.rb` are licensed under GPLv2.
